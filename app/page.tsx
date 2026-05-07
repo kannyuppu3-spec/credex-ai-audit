@@ -64,7 +64,115 @@ export default function Home() {
         </div>
 
       </section>
+{/* Audit Form Section */}
+<section className="px-8 pb-24">
 
+  <div className="max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-2xl p-8">
+
+    <h2 className="text-3xl font-bold text-center">
+      Start Your Free AI Spend Audit
+    </h2>
+
+    <p className="text-gray-400 text-center mt-4">
+      Enter your current AI tools and monthly spending.
+    </p>
+
+    <form className="mt-10 space-y-6">
+
+      {/* Tool Name */}
+      <div>
+        <label className="block mb-2 font-medium">
+          AI Tool
+        </label>
+
+        <select className="w-full p-3 rounded-xl bg-black border border-gray-700">
+          <option>ChatGPT</option>
+          <option>Claude</option>
+          <option>Cursor</option>
+          <option>GitHub Copilot</option>
+          <option>Gemini</option>
+        </select>
+      </div>
+
+      {/* Plan */}
+      <div>
+        <label className="block mb-2 font-medium">
+          Plan
+        </label>
+
+        <select className="w-full p-3 rounded-xl bg-black border border-gray-700">
+          <option>Free</option>
+          <option>Plus</option>
+          <option>Team</option>
+          <option>Enterprise</option>
+        </select>
+      </div>
+
+      {/* Monthly Spend */}
+      <div>
+        <label className="block mb-2 font-medium">
+          Monthly Spend ($)
+        </label>
+
+        <input
+          type="number"
+          placeholder="100"
+          className="w-full p-3 rounded-xl bg-black border border-gray-700"
+        />
+      </div>
+
+      {/* Seats */}
+      <div>
+        <label className="block mb-2 font-medium">
+          Number of Seats
+        </label>
+
+        <input
+          type="number"
+          placeholder="5"
+          className="w-full p-3 rounded-xl bg-black border border-gray-700"
+        />
+      </div>
+
+      {/* Team Size */}
+      <div>
+        <label className="block mb-2 font-medium">
+          Team Size
+        </label>
+
+        <input
+          type="number"
+          placeholder="10"
+          className="w-full p-3 rounded-xl bg-black border border-gray-700"
+        />
+      </div>
+
+      {/* Use Case */}
+      <div>
+        <label className="block mb-2 font-medium">
+          Primary Use Case
+        </label>
+
+        <select className="w-full p-3 rounded-xl bg-black border border-gray-700">
+          <option>Coding</option>
+          <option>Writing</option>
+          <option>Research</option>
+          <option>Data Analysis</option>
+          <option>Mixed</option>
+        </select>
+      </div>
+
+      <button className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200">
+        Generate Audit
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
     </main>
+    
   );
+  
 }
