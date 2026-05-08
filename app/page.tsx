@@ -10,6 +10,9 @@ const [seats, setSeats] = useState("");
 const [teamSize, setTeamSize] = useState("");
 const [useCase, setUseCase] = useState("Coding");
 const [result, setResult] = useState("");
+const [monthlySavings, setMonthlySavings] = useState(0);
+
+const [annualSavings, setAnnualSavings] = useState(0);
 useEffect(() => {
 
   localStorage.setItem("tool", tool);
@@ -42,30 +45,66 @@ const generateAudit = () => {
   let recommendation = "";
   let savings = 0;
 
-  // Rule 1
+  // Small team overpaying
   if (plan === "Team" && Number(seats) < 3) {
+
     recommendation =
-      `Your ${tool} Team plan may be too expensive for a small team. Switching to Plus could reduce unnecessary spending.`;
+      `Your ${tool} Team plan may be too expensive for a small team. Downgrading to Plus could significantly reduce costs.`;
 
     savings = 30;
   }
 
-  // Rule 2
-  else if (monthlySpend && Number(monthlySpend) > 500) {
+  // High spending
+  else if (Number(monthlySpend) > 500) {
+
     recommendation =
-      `Your AI spending is relatively high. You may benefit from discounted AI credits through Credex.`;
+      `Your AI spending is relatively high. Credex enterprise credits and usage optimization may reduce unnecessary expenses.`;
 
     savings = 100;
   }
 
-  // Default
-  else {
+  // Large team recommendation
+  else if (Number(teamSize) > 20) {
+
     recommendation =
-      `Your current AI setup appears reasonably optimized.`;
+      `Large teams often benefit from centralized AI billing and seat optimization strategies.`;
+
+    savings = 75;
   }
 
+  // Marketing use case
+  else if (useCase === "Marketing") {
+
+    recommendation =
+      `Marketing teams often overspend on overlapping AI content tools. Consolidation may reduce costs.`;
+
+    savings = 40;
+  }
+
+  // Coding use case
+  else if (useCase === "Coding") {
+
+    recommendation =
+      `Developer teams can often reduce AI expenses through shared enterprise tooling and optimized seat allocation.`;
+
+    savings = 50;
+  }
+
+  // Default
+  else {
+
+    recommendation =
+      `Your current AI stack appears reasonably optimized.`;
+
+    savings = 10;
+  }
+
+  setMonthlySavings(savings);
+
+  setAnnualSavings(savings * 12);
+
   setResult(
-    `Potential Savings: $${savings}/month — ${recommendation}`
+    recommendation
   );
 };
   return (
