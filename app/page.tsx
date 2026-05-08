@@ -1,16 +1,74 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 
 export default function Home() {
+  const [tool, setTool] = useState("ChatGPT");
+const [plan, setPlan] = useState("Plus");
+const [monthlySpend, setMonthlySpend] = useState("");
+const [seats, setSeats] = useState("");
+const [teamSize, setTeamSize] = useState("");
+const [useCase, setUseCase] = useState("Coding");
+const [result, setResult] = useState("");
+const generateAudit = () => {
+
+  let recommendation = "";
+  let savings = 0;
+
+  // Rule 1
+  if (plan === "Team" && Number(seats) < 3) {
+    recommendation =
+      `Your ${tool} Team plan may be too expensive for a small team. Switching to Plus could reduce unnecessary spending.`;
+
+    savings = 30;
+  }
+
+  // Rule 2
+  else if (monthlySpend && Number(monthlySpend) > 500) {
+    recommendation =
+      `Your AI spending is relatively high. You may benefit from discounted AI credits through Credex.`;
+
+    savings = 100;
+  }
+
+  // Default
+  else {
+    recommendation =
+      `Your current AI setup appears reasonably optimized.`;
+  }
+
+  setResult(
+    `Potential Savings: $${savings}/month — ${recommendation}`
+  );
+};
   return (
+    
     <main className="min-h-screen bg-black text-white">
 
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-6 border-b border-gray-800">
         <h1 className="text-2xl font-bold">Credex Audit</h1>
 
-        <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-          Start Audit
-        </button>
+        <button
+  type="button"
+  onClick={generateAudit}
+  className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200"
+>
+  Generate Audit
+</button>
+{result && (
+  <div className="mt-6 p-5 rounded-2xl border border-gray-700 bg-black">
+    
+    <h3 className="text-xl font-semibold text-green-400">
+      Audit Result
+    </h3>
+
+    <p className="mt-3 text-gray-300">
+      {result}
+    </p>
+
+  </div>
+)}
       </nav>
 
       {/* Hero Section */}
@@ -85,7 +143,11 @@ export default function Home() {
           AI Tool
         </label>
 
-        <select className="w-full p-3 rounded-xl bg-black border border-gray-700">
+        <select
+  value={tool}
+  onChange={(e) => setTool(e.target.value)}
+  className="w-full p-3 rounded-xl bg-black border border-gray-700"
+>
           <option>ChatGPT</option>
           <option>Claude</option>
           <option>Cursor</option>
@@ -100,7 +162,11 @@ export default function Home() {
           Plan
         </label>
 
-        <select className="w-full p-3 rounded-xl bg-black border border-gray-700">
+        <select
+  value={plan}
+  onChange={(e) => setPlan(e.target.value)}
+  className="w-full p-3 rounded-xl bg-black border border-gray-700"
+>
           <option>Free</option>
           <option>Plus</option>
           <option>Team</option>
@@ -115,10 +181,12 @@ export default function Home() {
         </label>
 
         <input
-          type="number"
-          placeholder="100"
-          className="w-full p-3 rounded-xl bg-black border border-gray-700"
-        />
+  type="number"
+  value={monthlySpend}
+  onChange={(e) => setMonthlySpend(e.target.value)}
+  placeholder="100"
+  className="w-full p-3 rounded-xl bg-black border border-gray-700"
+/>
       </div>
 
       {/* Seats */}
@@ -128,10 +196,12 @@ export default function Home() {
         </label>
 
         <input
-          type="number"
-          placeholder="5"
-          className="w-full p-3 rounded-xl bg-black border border-gray-700"
-        />
+  type="number"
+  value={seats}
+  onChange={(e) => setSeats(e.target.value)}
+  placeholder="5"
+  className="w-full p-3 rounded-xl bg-black border border-gray-700"
+/>
       </div>
 
       {/* Team Size */}
@@ -141,10 +211,12 @@ export default function Home() {
         </label>
 
         <input
-          type="number"
-          placeholder="10"
-          className="w-full p-3 rounded-xl bg-black border border-gray-700"
-        />
+  type="number"
+  value={teamSize}
+  onChange={(e) => setTeamSize(e.target.value)}
+  placeholder="10"
+  className="w-full p-3 rounded-xl bg-black border border-gray-700"
+/>
       </div>
 
       {/* Use Case */}
@@ -153,7 +225,11 @@ export default function Home() {
           Primary Use Case
         </label>
 
-        <select className="w-full p-3 rounded-xl bg-black border border-gray-700">
+        <select
+  value={useCase}
+  onChange={(e) => setUseCase(e.target.value)}
+  className="w-full p-3 rounded-xl bg-black border border-gray-700"
+>
           <option>Coding</option>
           <option>Writing</option>
           <option>Research</option>
