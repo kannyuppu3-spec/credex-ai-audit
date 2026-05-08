@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function Home() {
@@ -10,6 +10,33 @@ const [seats, setSeats] = useState("");
 const [teamSize, setTeamSize] = useState("");
 const [useCase, setUseCase] = useState("Coding");
 const [result, setResult] = useState("");
+useEffect(() => {
+
+  localStorage.setItem("tool", tool);
+  localStorage.setItem("plan", plan);
+  localStorage.setItem("monthlySpend", monthlySpend);
+  localStorage.setItem("seats", seats);
+  localStorage.setItem("teamSize", teamSize);
+  localStorage.setItem("useCase", useCase);
+
+}, [tool, plan, monthlySpend, seats, teamSize, useCase]);
+useEffect(() => {
+
+  const savedTool = localStorage.getItem("tool");
+  const savedPlan = localStorage.getItem("plan");
+  const savedMonthlySpend = localStorage.getItem("monthlySpend");
+  const savedSeats = localStorage.getItem("seats");
+  const savedTeamSize = localStorage.getItem("teamSize");
+  const savedUseCase = localStorage.getItem("useCase");
+
+  if (savedTool) setTool(savedTool);
+  if (savedPlan) setPlan(savedPlan);
+  if (savedMonthlySpend) setMonthlySpend(savedMonthlySpend);
+  if (savedSeats) setSeats(savedSeats);
+  if (savedTeamSize) setTeamSize(savedTeamSize);
+  if (savedUseCase) setUseCase(savedUseCase);
+
+}, []);
 const generateAudit = () => {
 
   let recommendation = "";
