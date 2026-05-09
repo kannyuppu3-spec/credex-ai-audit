@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import { supabase } from  "@/lib/supabase";
 import Image from "next/image";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   const [tool, setTool] = useState("ChatGPT");
 const [plan, setPlan] = useState("Plus");
 const [monthlySpend, setMonthlySpend] = useState("");
@@ -40,8 +42,9 @@ useEffect(() => {
   if (savedUseCase) setUseCase(savedUseCase);
 
 }, []);
-const generateAudit = () => {
-
+const generateAudit = async () => {
+  
+setLoading(true);
   let recommendation = "";
   let savings = 0;
 
@@ -106,6 +109,30 @@ const generateAudit = () => {
   setResult(
     recommendation
   );
+  const { error } = await supabase
+  .from("audits")
+  .insert([
+    {
+      tool,
+      plan,
+      monthly_spend: monthlySpend,
+      seats,
+      team_size: teamSize,
+      use_case: useCase,
+
+      recommendation,
+
+      monthly_savings: savings,
+      annual_savings: savings * 12,
+    },
+  ]);
+
+if (error) {
+  console.log(error);
+}
+else {
+  console.log("Audit saved successfully");
+}setLoading(false);
 };
   return (
     
@@ -118,20 +145,47 @@ const generateAudit = () => {
         <button
   type="button"
   onClick={generateAudit}
-  className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200"
+  disabled={loading}
+  className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200 disabled:opacity-50"
 >
-  Generate Audit
+  {loading ? "Generating Audit..." : "Generate Audit"}
 </button>
 {result && (
-  <div className="mt-6 p-5 rounded-2xl border border-gray-700 bg-black">
-    
-    <h3 className="text-xl font-semibold text-green-400">
-      Audit Result
-    </h3>
+  <div className="mt-8 space-y-6">
 
-    <p className="mt-3 text-gray-300">
-      {result}
-    </p>
+    <div className="p-6 rounded-2xl border border-gray-700 bg-black">
+      <h3 className="text-2xl font-bold text-green-400">
+        Audit Result
+      </h3>
+
+      <p className="mt-4 text-gray-300 text-lg">
+        {result}
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div className="p-6 rounded-2xl bg-gray-900 border border-gray-800">
+        <h4 className="text-gray-400">
+          Monthly Savings
+        </h4>
+
+        <p className="text-4xl font-bold mt-3 text-white">
+          ${monthlySavings}
+        </p>
+      </div>
+
+      <div className="p-6 rounded-2xl bg-gray-900 border border-gray-800">
+        <h4 className="text-gray-400">
+          Annual Savings
+        </h4>
+
+        <p className="text-4xl font-bold mt-3 text-green-400">
+          ${annualSavings}
+        </p>
+      </div>
+
+    </div>
 
   </div>
 )}
@@ -304,10 +358,13 @@ const generateAudit = () => {
         </select>
       </div>
 
-      <button className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200">
-        Generate Audit
-      </button>
-
+      <button
+  type="button"
+  onClick={generateAudit}
+  className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200"
+>
+  Generate Audit
+</button>
     </form>
 
   </div>
