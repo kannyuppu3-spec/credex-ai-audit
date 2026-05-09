@@ -4,6 +4,7 @@ import { supabase } from  "@/lib/supabase";
 import Image from "next/image";
 
 export default function Home() {
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [tool, setTool] = useState("ChatGPT");
 const [plan, setPlan] = useState("Plus");
@@ -40,6 +41,26 @@ useEffect(() => {
   if (savedSeats) setSeats(savedSeats);
   if (savedTeamSize) setTeamSize(savedTeamSize);
   if (savedUseCase) setUseCase(savedUseCase);
+
+  const getSession = async () => {
+    const { data } = await supabase.auth.getSession();
+
+    if (data.session) {
+      setUser(data.session.user);
+    }
+  };
+
+  getSession();
+
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
+      setUser(session?.user ?? null);
+    }
+  );
+
+  return () => subscription.unsubscribe();
 
 }, []);
 const generateAudit = async () => {
@@ -134,61 +155,68 @@ else {
   console.log("Audit saved successfully");
 }setLoading(false);
 };
+const signInWithGoogle = async () => {
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+  provider: "google",
+  options: {
+    redirectTo: "http://localhost:3000",
+  },
+});
+
+  if (error) {
+    console.log(error);
+  }
+};const signOut = async () => {
+  await supabase.auth.signOut();
+  setUser(null);
+};
+useEffect(() => {
+
+  const checkUser = async () => {
+
+    const { data } = await supabase.auth.getUser();
+
+    if (data.user) {
+      setUser(data.user);
+    }
+
+  };
+
+  checkUser();
+
+}, []);
+
   return (
     
     <main className="min-h-screen bg-black text-white">
 
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-6 border-b border-gray-800">
-        <h1 className="text-2xl font-bold">Credex Audit</h1>
 
-        <button
-  type="button"
-  onClick={generateAudit}
-  disabled={loading}
-  className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200 disabled:opacity-50"
->
-  {loading ? "Generating Audit..." : "Generate Audit"}
-</button>
-{result && (
-  <div className="mt-8 space-y-6">
+  <h1 className="text-2xl font-bold">
+    Credex Audit
+  </h1>
 
-    <div className="p-6 rounded-2xl border border-gray-700 bg-black">
-      <h3 className="text-2xl font-bold text-green-400">
-        Audit Result
-      </h3>
+  {user ? (
+    <button
+      onClick={signOut}
+      className="bg-red-500 text-white px-4 py-2 rounded-xl font-semibold"
+    >
+      Logout
+    </button>
+  ) : (
+    <button
+      onClick={signInWithGoogle}
+      className="bg-white text-black px-4 py-2 rounded-xl font-semibold"
+    >
+      Login with Google
+    </button>
+  )}
 
-      <p className="mt-4 text-gray-300 text-lg">
-        {result}
-      </p>
-    </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
 
-      <div className="p-6 rounded-2xl bg-gray-900 border border-gray-800">
-        <h4 className="text-gray-400">
-          Monthly Savings
-        </h4>
-
-        <p className="text-4xl font-bold mt-3 text-white">
-          ${monthlySavings}
-        </p>
-      </div>
-
-      <div className="p-6 rounded-2xl bg-gray-900 border border-gray-800">
-        <h4 className="text-gray-400">
-          Annual Savings
-        </h4>
-
-        <p className="text-4xl font-bold mt-3 text-green-400">
-          ${annualSavings}
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-)}
       </nav>
 
       {/* Hero Section */}
