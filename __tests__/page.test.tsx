@@ -1,3 +1,6 @@
+jest.mock("@/lib/supabase", () => ({
+  supabase: require("../__mocks__/supabase").supabase,
+}));
 import { render, screen } from "@testing-library/react";
 import Home from "@/app/page";
 
