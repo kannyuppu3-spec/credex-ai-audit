@@ -1,19 +1,26 @@
 # Credex AI Audit
 
-AI-powered SaaS platform that helps startups analyze and reduce AI tool spending.
+AI-powered SaaS platform that helps startups analyze, optimize, and reduce AI tool spending through intelligent audit reports, savings recommendations, and automated insights.
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-Blue)
+![Supabase](https://img.shields.io/badge/Supabase-Green)
+![CI](https://img.shields.io/badge/CI-Passing-success)
+![License](https://img.shields.io/badge/license-MIT-blue)
+## Live Demo
+
+https://your-vercel-link.vercel.app
 
 ## Features
 
-- AI spend audit engine
-- Savings recommendations
-- AI-generated summaries
+- AI-generated spend analysis
+- Savings optimization engine
 - Google authentication
-- Shareable audit URLs
+- Shareable audit reports
 - PDF export
-- Email reports
-- SEO optimized
-- CI/CD with GitHub Actions
-- Lighthouse optimized
+- Email delivery
+- SEO optimization
+- CI/CD automation
+- Responsive SaaS dashboard
 
 ## Tech Stack
 
@@ -26,10 +33,26 @@ AI-powered SaaS platform that helps startups analyze and reduce AI tool spending
 - Jest
 - GitHub Actions
 
-## Screenshots
+## Project Structure
 
-(Add screenshots here)
+```bash
+app/
+components/
+lib/
+public/
+__tests__/
+.github/workflows/
+```
+## Key Learnings
 
+- Building production-grade SaaS apps
+- Authentication with Supabase
+- Dynamic routing in Next.js
+- API route handling
+- Automated testing with Jest
+- CI/CD pipelines with GitHub Actions
+- Performance optimization
+- SEO best practices
 ## Installation
 
 ```bash
